@@ -84,41 +84,13 @@ const menu = [
 const sectionCenter = document.querySelector(".section-center");
 const container = document.querySelector(".btn-container")
 
-const filterBtns = document.querySelectorAll(".filter-btn");
+
 
 //load items
 window.addEventListener("DOMContentLoaded", function () {
     displayMenuItems(menu);
-
-
-    const categories = menu.reduce(function (values, item) {
-        if (!values.includes(item.category)) {
-            values.push(item.category)
-        }
-        return values
-    }, ['all']);
-    const categoryBtns = categories.map(function (category) {
-        return ` <button class="filter-btn" type="button" data-id=${category}>${category}</button>`
-    }).join("")
-    container.innerHTML = categoryBtns
+    displayMenuButtons()
 })
-
-filterBtns.forEach(function (btn) {
-    btn.addEventListener("click", function (e) {
-        const category = e.currentTarget.dataset.id
-        const menuCategory = menu.filter(function (menuItem) {
-            if (menuItem.category === category) {
-                return menuItem;
-            }
-        });
-        if (category === "all") {
-            displayMenuItems(menu)
-        }
-        else {
-            displayMenuItems(menuCategory)
-        }
-    });
-});
 
 
 function displayMenuItems(menuItems) {
@@ -140,15 +112,33 @@ function displayMenuItems(menuItems) {
     sectionCenter.innerHTML = displayMenu
 }
 
-function dispalyCategoryItems(categoryItems) {
-    let dispalyCategory = categoryItems.map(function (item) {
-        return `<div class="btn-container">
-        <button class="filter-btn" type="button" data-id="all">${item.category}</button>
-        <button class="filter-btn" type="button" data-id="breakfast">${item.category}</button>
-        <button class="filter-btn" type="button" data-id="lunch">${item.category}</button>
-        <button class="filter-btn" type="button" data-id="shakes">${item.category}</button>
-      </div>`
-    })
-    dispalyCategory = dispalyCategory.join("");
-    filterBtns.innerHTML = dispalyCategory;
+
+function displayMenuButtons() {
+    const categories = menu.reduce(function (values, item) {
+        if (!values.includes(item.category)) {
+            values.push(item.category)
+        }
+        return values
+    }, ['all']);
+    const categoryBtns = categories.map(function (category) {
+        return ` <button class="filter-btn" type="button" data-id=${category}>${category}</button>`
+    }).join("")
+    container.innerHTML = categoryBtns
+    const filterBtns = document.querySelectorAll(".filter-btn");
+    filterBtns.forEach(function (btn) {
+        btn.addEventListener("click", function (e) {
+            const category = e.currentTarget.dataset.id
+            const menuCategory = menu.filter(function (menuItem) {
+                if (menuItem.category === category) {
+                    return menuItem;
+                }
+            });
+            if (category === "all") {
+                displayMenuItems(menu)
+            }
+            else {
+                displayMenuItems(menuCategory)
+            }
+        });
+    });
 }
