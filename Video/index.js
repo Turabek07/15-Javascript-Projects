@@ -12,3 +12,8 @@ btn.addEventListener('click', function () {
     }
     // btn.classList.toggle("slide")
 })
+const preloader = document.querySelector(".preloader")
+
+window.addEventListener("load",function(){
+    preloader.classList.add("hide-preloader")
+})
