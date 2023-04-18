@@ -14,6 +14,7 @@ let editId = "";
 // ****** EVENT LISTENERS **********
 //submit from
 form.addEventListener("submit", addItem);
+clearBtn.addEventListener("click", clearItems)
 // ****** FUNCTIONS **********
 function addItem(e) {
     e.preventDefault();
@@ -41,8 +42,11 @@ function addItem(e) {
         //display alert
         displayAlert("item added to the list ", "succes");
         //show cantainer
-        container.classList.add("show-container")
-
+        container.classList.add("show-container");
+        //add to local storage
+        addToLocalStorage();
+        //set back to deault
+        setBackDefault();
     } else if (value && editFlag) {
 
     } else {
@@ -59,8 +63,29 @@ function displayAlert(text, action) {
     setTimeout(function () {
         alert.textContent = "";
         alert.classList.remove(`alert-${action}`)
-    }, 2000)
+    }, 1000)
+}
+
+//clear items
+function clearItems() {
+    const items = document.querySelectorAll(".grocery-item")
+    if (items.length > 0) {
+        items.forEach(function (item) {
+            list.removeChild(item)
+        })
+    }
+    container.classList.remove("show-container")
+    displayAlert("empty list", "danger")
+}
+//set back to default
+function seBackToDefault() {
+    grocery.value = "";
+    editFlag = false;
+    editId = '';
+    sumbitBtn.textContent = "submit"
 }
 // ****** LOCAL STORAGE **********
+function addTOlocalStorage(id, value) {
 
+}
 // ****** SETUP ITEMS **********
