@@ -15,7 +15,9 @@ let editId = "";
 //submit from
 form.addEventListener("submit", addItem);
 clearBtn.addEventListener("click", clearItems)
+//load items
 
+window.addEventListener('DOMContentLoaded', setupItems);
 
 // ****** FUNCTIONS **********
 function addItem(e) {
@@ -23,30 +25,7 @@ function addItem(e) {
     const value = grocery.value;
     const id = new Date().getTime().toString();
     if (value !== "" && !editFlag) {
-        const element = document.createElement("article")
-        //add id
-        const attr = document.createAttribute("data-id");
-        attr.value = id;
-        element.setAttributeNode(attr);
-        //add class
-        element.classList.add("grocery-item");
-        element.innerHTML = ` <p class="title">${value}</p>
-    <div class="btn-container">
-      <button type="button" class="edit-btn">
-    <i class="fas fa-edit"></i>
-      </button>
-      <button type="button" class="delete-btn">
-          <i class="fas fa-trash"></i>
-            </button>
-    </div>`;
-        const deleteBtn = document.querySelector(".delete-btn");
-        deleteBtn.addEventListener("click", deleteItem);
-        const editBtn = document.querySelector(".edit-btn");
-        editBtn.addEventListener("click", editItem);
-
-        //append child
-        list.appendChild(element);
-        //display alert
+        createitemList(id, value)
         displayAlert("item added to the list ", "succes");
         //show cantainer
         container.classList.add("show-container");
@@ -86,6 +65,7 @@ function clearItems() {
     container.classList.remove("show-container")
     displayAlert("empty list", "danger");
     setBackToDefault();
+    localStorage.removeItem('list')
 }
 //delete function
 function deleteItem(e) {
@@ -120,6 +100,9 @@ function setBackToDefault() {
     sumbitBtn.textContent = "submit"
 }
 // ****** LOCAL STORAGE **********
+
+
+
 function addToLocalStorage(id, value) {
     const grocery = { id, value };
     let items = getLocalStorage();
@@ -128,6 +111,9 @@ function addToLocalStorage(id, value) {
 
 
 }
+
+
+
 function removeFromLocalStorage(id) {
     let items = getLocalStorage();
     items = items.filter(function (item) {
@@ -137,14 +123,66 @@ function removeFromLocalStorage(id) {
     });
     localStorage.setItem('list', JSON.stringify(items));
 }
-function editLocalStorage(id, value) {
 
+
+
+
+function editLocalStorage(id, value) {
+    let items = getLocalStorage();
+    items = items.map(function (item) {
+        if (item.id === id) {
+            item.value = value;
+        }
+        return item;
+    });
+    localStorage.setItem('list', JSON.stringify(items));
 }
+
+
 
 function getLocalStorage() {
     return localStorage.getItem('list') ? JSON.parse(localStorage.getItem("list")) : [];
 }
-localStorage.setItem("orange", JSON.stringify(["item", "item2"]));
-const oranges = JSON.parse(localStorage.getItem("orange"));
-localStorage.removeItem("")
+// localStorage.setItem("orange", JSON.stringify(["item", "item2"]));
+// const oranges = JSON.parse(localStorage.getItem("orange"));
+// localStorage.removeItem("")
+
+
 // ****** SETUP ITEMS **********
+
+function setupItems() {
+    let items = getLocalStorage();
+    if (items.length > 0) {
+        items.forEach(function (item) {
+            createitemList(item.id, item.value)
+        });
+        container.classList.add("show-container")
+    }
+}
+
+function createitemList(id, value) {
+    const element = document.createElement("article")
+    //add id
+    const attr = document.createAttribute("data-id");
+    attr.value = id;
+    element.setAttributeNode(attr);
+    //add class
+    element.classList.add("grocery-item");
+    element.innerHTML = ` <p class="title">${value}</p>
+<div class="btn-container">
+  <button type="button" class="edit-btn">
+<i class="fas fa-edit"></i>
+  </button>
+  <button type="button" class="delete-btn">
+      <i class="fas fa-trash"></i>
+        </button>
+</div>`;
+    // const deleteBtn = document.querySelector(".delete-btn");
+    // deleteBtn.addEventListener("click", deleteItem);
+    const editBtn = document.querySelector(".edit-btn");
+    editBtn.addEventListener("click", editItem);
+
+    //append child
+    list.appendChild(element);
+    //display alert
+}
