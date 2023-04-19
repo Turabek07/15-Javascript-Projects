@@ -15,6 +15,8 @@ let editId = "";
 //submit from
 form.addEventListener("submit", addItem);
 clearBtn.addEventListener("click", clearItems)
+
+
 // ****** FUNCTIONS **********
 function addItem(e) {
     e.preventDefault();
@@ -36,7 +38,12 @@ function addItem(e) {
       <button type="button" class="delete-btn">
           <i class="fas fa-trash"></i>
             </button>
-    </div>`
+    </div>`;
+    const deleteBtn = document.querySelector(".delete-btn");
+    deleteBtn.addEventListener("click",deleteItem);
+    const editBtn = document.querySelector(".edit-btn");
+    editBtn.addEventListener("click",editItem);
+
         //append child
         list.appendChild(element);
         //display alert
@@ -46,9 +53,11 @@ function addItem(e) {
         //add to local storage
         addToLocalStorage();
         //set back to deault
-        setBackDefault();
+        setBackToDefault();
     } else if (value && editFlag) {
-
+         editElement.innerHTML = value;
+         displayAlert("value changed","success");
+         setBackToDefault()
     } else {
         displayAlert("please enter value", "danger")
     }
@@ -72,20 +81,52 @@ function clearItems() {
     if (items.length > 0) {
         items.forEach(function (item) {
             list.removeChild(item)
-        })
+        });
     }
     container.classList.remove("show-container")
-    displayAlert("empty list", "danger")
+    displayAlert("empty list", "danger");
+    setBackToDefault();
 }
+//delete function
+function deleteItem(e){
+   const element = e.currentTarget.parentElement.parentElement;
+   const id = element.dataset.id;
+   list.removeChild(element);
+   if(list.children.length === 0){
+    container.classList.remove("show-container")
+   }
+   displayAlert("item removed","danger");
+   setBackToDefault();
+   //remove from local storage
+//    removeFromLocalStorage(id)
+}
+//edit function
+function editItem(){
+    const element = e.currentTarget.parentElement.parentElement;
+    //set edit item
+    editElement = e.currentTarget.parentElement.previousElementSibling;
+    //set from value
+    grocery.value = editElement.innerHTML;
+    editFlag = true;
+    editId = element.dataset.id;
+    sumbitBtn.textContent = "edit";
+}
+
 //set back to default
-function seBackToDefault() {
+function setBackToDefault() {
     grocery.value = "";
     editFlag = false;
     editId = '';
     sumbitBtn.textContent = "submit"
 }
 // ****** LOCAL STORAGE **********
-function addTOlocalStorage(id, value) {
+function addToLocalStorage(id, value) {
 
+}
+function removeFromLocalStorage(id){
+
+}
+function editLocalStorage(id,value){
+  
 }
 // ****** SETUP ITEMS **********
