@@ -39,10 +39,10 @@ function addItem(e) {
           <i class="fas fa-trash"></i>
             </button>
     </div>`;
-    const deleteBtn = document.querySelector(".delete-btn");
-    deleteBtn.addEventListener("click",deleteItem);
-    const editBtn = document.querySelector(".edit-btn");
-    editBtn.addEventListener("click",editItem);
+        const deleteBtn = document.querySelector(".delete-btn");
+        deleteBtn.addEventListener("click", deleteItem);
+        const editBtn = document.querySelector(".edit-btn");
+        editBtn.addEventListener("click", editItem);
 
         //append child
         list.appendChild(element);
@@ -55,9 +55,9 @@ function addItem(e) {
         //set back to deault
         setBackToDefault();
     } else if (value && editFlag) {
-         editElement.innerHTML = value;
-         displayAlert("value changed","success");
-         setBackToDefault()
+        editElement.innerHTML = value;
+        displayAlert("value changed", "success");
+        setBackToDefault()
     } else {
         displayAlert("please enter value", "danger")
     }
@@ -88,20 +88,20 @@ function clearItems() {
     setBackToDefault();
 }
 //delete function
-function deleteItem(e){
-   const element = e.currentTarget.parentElement.parentElement;
-   const id = element.dataset.id;
-   list.removeChild(element);
-   if(list.children.length === 0){
-    container.classList.remove("show-container")
-   }
-   displayAlert("item removed","danger");
-   setBackToDefault();
-   //remove from local storage
-//    removeFromLocalStorage(id)
+function deleteItem(e) {
+    const element = e.currentTarget.parentElement.parentElement;
+    const id = element.dataset.id;
+    list.removeChild(element);
+    if (list.children.length === 0) {
+        container.classList.remove("show-container")
+    }
+    displayAlert("item removed", "danger");
+    setBackToDefault();
+    //remove from local storage
+    removeFromLocalStorage(id)
 }
 //edit function
-function editItem(){
+function editItem() {
     const element = e.currentTarget.parentElement.parentElement;
     //set edit item
     editElement = e.currentTarget.parentElement.previousElementSibling;
@@ -121,12 +121,30 @@ function setBackToDefault() {
 }
 // ****** LOCAL STORAGE **********
 function addToLocalStorage(id, value) {
+    const grocery = { id, value };
+    let items = getLocalStorage();
+    items.push(grocery);
+    localStorage.setItem('list', JSON.stringify(items))
+
 
 }
-function removeFromLocalStorage(id){
+function removeFromLocalStorage(id) {
+    let items = getLocalStorage();
+    items = items.filter(function (item) {
+        if (item.id !== id) {
+            return item;
+        }
+    });
+    localStorage.setItem('list', JSON.stringify(items));
+}
+function editLocalStorage(id, value) {
 
 }
-function editLocalStorage(id,value){
-  
+
+function getLocalStorage() {
+    return localStorage.getItem('list') ? JSON.parse(localStorage.getItem("list")) : [];
 }
+localStorage.setItem("orange", JSON.stringify(["item", "item2"]));
+const oranges = JSON.parse(localStorage.getItem("orange"));
+localStorage.removeItem("")
 // ****** SETUP ITEMS **********
